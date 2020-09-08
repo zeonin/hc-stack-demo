@@ -25,7 +25,3 @@
    
 ** Consul
    Abstract the network of the cluster
-
-* Additional tooling
-** Nix
-   Used to ensure availability of some deployment-machine tools, specifically setup.sh

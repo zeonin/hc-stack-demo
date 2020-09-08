@@ -1,3 +1,2 @@
-keys/*
 .terraform
 terraform.tfstate*
