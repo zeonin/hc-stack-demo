@@ -1,0 +1,63 @@
+{
+  "min_packer_version": "0.12.0",
+  "variables": {
+    "aws_region": "us-west-2",
+    "nomad_module_version": "v0.6.5",
+    "nomad_version": "0.11.4",
+    "consul_module_version": "v0.7.10",
+    "consul_version": "1.8.0",
+    "ami_name_prefix": "demo-nomad-consul",
+    "envoy_version": "1.14.2"
+  },
+  "builders": [
+    {
+      "name": "ubuntu16-ami",
+      "ami_name": "{{user `ami_name_prefix`}}-docker-ubuntu16-{{isotime | clean_resource_name}}",
+      "ami_description": "An Ubuntu 16.04 AMI that has Nomad, Consul and Docker installed.",
+      "instance_type": "t2.micro",
+      "region": "{{user `aws_region`}}",
+      "type": "amazon-ebs",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "architecture": "x86_64",
+          "name": "*ubuntu-xenial-16.04-amd64-server-*",
+          "block-device-mapping.volume-type": "gp2",
+          "root-device-type": "ebs"
+        },
+        "owners": [
+          "099720109477"
+        ],
+        "most_recent": true
+      },
+      "ssh_username": "ubuntu"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/setup_ubuntu.sh",
+      "only": [
+        "ubuntu16-ami"
+      ]
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "NOMAD_VERSION={{user `nomad_version`}}",
+        "NOMAD_MODULE_VERSION={{user `nomad_module_version`}}",
+        "CONSUL_VERSION={{user `consul_version`}}",
+        "CONSUL_MODULE_VERSION={{user `consul_module_version`}}"
+      ],
+      "script": "{{template_dir}}/setup_nomad_consul.sh"
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "ENVOY_VERSION={{user `envoy_version`}}"
+      ],
+      "script": "{{template_dir}}/setup_envoy.sh"
+    }
+  ]
+}
+

@@ -1,0 +1,6 @@
+* Packer configuration
+
+This directory contains the resources needed to build an AMI for
+deploying Consul, Envoy, and Nomad. The configuration was tweaked
+slightly from [[https://github.com/hashicorp/terraform-aws-nomad/tree/master/examples/nomad-consul-ami][Hashicorp's nomad-consul ami]] in order to set up the
+correct sysctl configurations and install envoy.

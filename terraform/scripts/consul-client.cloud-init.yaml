@@ -1,0 +1,19 @@
+#cloud-config
+
+merge_how:
+ - name: list
+   settings: [append]
+ - name: dict
+   settings: [no_replace, recurse_list]
+
+write_files:
+- owner: root:root
+  path: /etc/consul.d/10-consul-client.hcl
+  permissions: '0644'
+  content: |
+    bind_addr = "{{ GetPrivateInterfaces | include \"network\" \"${subnet}\" | attr \"address\" }}"
+    retry_join = [ "provider=aws tag_key=consul_server tag_value=true" ]
+
+runcmd:
+ - [ systemctl, enable, consul ]
+ - [ systemctl, start, consul ]

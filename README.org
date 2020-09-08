@@ -1,0 +1,31 @@
+* A basic project to test out some of the HashiCorp products
+
+** Terraform - Provision nodes across a cloud environment
+   The contents of [[file:terraform][the terraform directory]] were my first attempt at
+   dynamically spinning up a consul+nomad cluster. While the contents
+   of the directory are no longer used (and are not currently in a
+   runnable state), they are left for posterity.
+
+   During the development of the above, I stumbled upon the
+   [[https://github.com/hashicorp/terraform-aws-nomad][terraform-aws-nomad module]] as well as the [[https://github.com/hashicorp/terraform-aws-consul][terraform-aws-consul
+   module]]. Seeing as these do exactly what I was setting out to do
+   above, are maintained upstream, and provide [[https://github.com/hashicorp/terraform-aws-nomad/blob/master/core-concepts.md#deploy-nomad-and-consul-in-the-same-cluster][documentation on
+   setting up a co-located cluster]], I opted to use them instead.
+
+** Nomad
+   Provide a clustered working environment. All sources live inside
+   [[file:nomad][the nomad directory]].
+
+#+BEGIN_SRC
+  nomad/
+    countdash.nomad    - Nomad example project for testing/debugging
+    redis.nomad        - Nomad configuration for deploying a single-instance of redis
+    voter.nomad        - Nomad configuration for a multi-instance voting web application
+#+END_SRC
+   
+** Consul
+   Abstract the network of the cluster
+
+* Additional tooling
+** Nix
+   Used to ensure availability of some deployment-machine tools, specifically setup.sh

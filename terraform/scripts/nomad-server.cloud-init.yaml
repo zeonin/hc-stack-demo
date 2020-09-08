@@ -1,0 +1,27 @@
+#cloud-config
+
+merge_how:
+ - name: list
+   settings: [append]
+ - name: dict
+   settings: [no_replace, recurse_list]
+
+write_files:
+- owner: root:root
+  path: /etc/sysconfig/selinux
+  permissions: '0644'
+  content: |
+    # Setup data dir
+    data_dir = "/var/lib/nomad"
+
+    # Enable the server
+    server {
+      enabled = true
+
+      # Self-elect, should be 3 or 5 for production
+      bootstrap_expect = ${nomad_server_count}
+    }
+
+runcmd:
+ - [ systemctl, enable, nomad ]
+ - [ systemctl, start, nomad ]
